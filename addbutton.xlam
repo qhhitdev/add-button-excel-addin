@@ -1,0 +1,56 @@
+Option Explicit
+
+' This subroutine is triggered when the add-in is loaded
+Private Sub Workbook_AddinInstall()
+    ' Add a custom button to the Ribbon
+    AddCustomButtonToRibbon
+End Sub
+
+' This subroutine is triggered when the add-in is unloaded
+Private Sub Workbook_AddinUninstall()
+    ' Remove the custom button from the Ribbon
+    RemoveCustomButtonFromRibbon
+End Sub
+
+' Adds a custom button to the Ribbon
+Private Sub AddCustomButtonToRibbon()
+    Dim customButton As CommandBarButton
+    Dim ribbon As CommandBars
+
+    ' Get the Ribbon object
+    Set ribbon = Application.CommandBars
+
+    ' Create a new button in the "Add-Ins" tab
+    Set customButton = ribbon("Add-Ins").Controls.Add(msoControlButton)
+
+    ' Set the button properties
+    With customButton
+        .Caption = "Custom Button"
+        .Style = msoButtonIconAndCaption
+        .FaceId = 123 ' Specify the face ID of the button's icon
+        .OnAction = "CustomButton_Click" ' Specify the subroutine to run when the button is clicked
+    End With
+End Sub
+
+' Removes the custom button from the Ribbon
+Private Sub RemoveCustomButtonFromRibbon()
+    Dim customButton As CommandBarButton
+    Dim ribbon As CommandBars
+
+    ' Get the Ribbon object
+    Set ribbon = Application.CommandBars
+
+    ' Find and delete the custom button in the "Add-Ins" tab
+    For Each customButton In ribbon("Add-Ins").Controls
+        If customButton.Caption = "Custom Button" Then
+            customButton.Delete
+            Exit For
+        End If
+    Next customButton
+End Sub
+
+' Subroutine that is triggered when the custom button is clicked
+Private Sub CustomButton_Click()
+    ' Add your custom code here
+    MsgBox "Custom button clicked!"
+End Sub
